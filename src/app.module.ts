@@ -3,6 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatMessage } from './chat/chat-message.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
 
 /**
  * Module principal de l'application NestJS
@@ -23,12 +26,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         type: 'mongodb', // Type de base de données
         url: config.get<string>('MONGO_URI'),
         synchronize: true, // Synchronise automatiquement le schéma avec la base de données
-        entities: [ChatMessage], // Liste des entités à synchroniser
+        entities: [ChatMessage, User], // Liste des entités à synchroniser
       }),
     }),
 
     // Enregistrement de l'entité ChatMessage pour l'injection de dépendances
     TypeOrmModule.forFeature([ChatMessage]),
+
+    AuthModule,
+
+    UsersModule,
   ],
   providers: [ChatGateway],
 })

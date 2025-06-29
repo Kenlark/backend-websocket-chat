@@ -73,4 +73,25 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Diffuse le message sauvegardé à tous les clients connectés
     this.server.emit('newMessage', saved);
   }
+
+  // Stocke les IDs des admins connectés (en mémoire)
+  private admins = new Set<string>();
+
+  @SubscribeMessage('adminStatus')
+  handleAdminStatus(
+    client: Socket,
+    payload: { user: string; isAdmin: boolean }, // { user: 'nom', isAdmin: true/false }
+  ) {
+    if (payload.isAdmin) {
+      this.admins.add(payload.user);
+    } else {
+      this.admins.delete(payload.user);
+    }
+    // Notifie tous les clients du changement de statut admin
+    this.server.emit('adminStatusChanged', {
+      user: payload.user,
+      isAdmin: payload.isAdmin,
+      admins: Array.from(this.admins),
+    });
+  }
 }
