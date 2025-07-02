@@ -1,0 +1,91 @@
+name: Intégration Continue
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Etape de build
+        run: npm run build
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérification du code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Test de l'application
+        run: npm run test
+
+  coverage:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérification du code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Génération du rapport de couverture
+        run: npm run test:cov
+
+      - name: Upload de la couverture
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/lcov-report
+
+  lint:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérification du code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Linting du code
+        run: npm run lint
