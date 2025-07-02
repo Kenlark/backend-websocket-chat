@@ -66,13 +66,12 @@ jobs:
         run: npm run test:cov
 
       - name: Upload de la couverture
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/lcov-report
 
   lint:
-    needs: test
     runs-on: ubuntu-latest
 
     steps:
