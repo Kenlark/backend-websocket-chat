@@ -4,6 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { ValidationPipe } from '@nestjs/common';
 
 /**
  * Point d'entrée principal de l'application NestJS
@@ -15,6 +16,8 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+
+  app.useGlobalPipes(new ValidationPipe());
 
   // Active CORS pour permettre les requêtes cross-origin
   app.enableCors();
