@@ -22,8 +22,4 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
 })
-export class AuthModule {
-  constructor() {
-    console.log('JWT secret:', process.env.JWT);
-  }
-}
+export class AuthModule {}
