@@ -17,6 +17,7 @@ import { ChatMessage } from './chat-message.entity';
 @WebSocketGateway({
   cors: {
     origin: '*',
+    methods: ['GET', 'POST'],
   },
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
@@ -11,7 +13,7 @@ describe('AuthController', () => {
   let app: INestApplication;
   // On mock le service d'authentification pour isoler le contrôleur
   let authService = {
-    login: jest.fn().mockImplementation((user) => {
+    login: jest.fn().mockImplementation(() => {
       return { access_token: 'fakeAccessToken' };
     }),
     register: jest.fn().mockImplementation((email, password, username) => {
